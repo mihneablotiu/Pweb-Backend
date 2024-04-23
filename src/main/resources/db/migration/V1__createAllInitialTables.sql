@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS feedbacks (
 
 
 -- Create junction table for many-to-many relationship between todos and tags
+-- Create table for many-to-many relationship between todos and tags
 CREATE TABLE IF NOT EXISTS todo_tag (
     todo_id BIGINT NOT NULL,
     tag_id BIGINT NOT NULL,
