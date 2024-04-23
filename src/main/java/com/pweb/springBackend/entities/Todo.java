@@ -28,9 +28,6 @@ public class Todo {
     @JoinColumn(name = "todo_list_id", nullable = false)
     private TodoList todoList;
 
-    @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
-
     @ManyToMany
     @JoinTable(
             name = "todo_tag",

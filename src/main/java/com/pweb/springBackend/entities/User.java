@@ -39,5 +39,5 @@ public class User {
     private List<TodoList> todoLists;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Feedback> feedbackList;
 }
