@@ -5,15 +5,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TodoListCreateOrUpdateDTO {
+public class TodoListDTO {
     private String title;
     private String description;
 
-    public TodoListCreateOrUpdateDTO() {
+    public TodoListDTO() {
 
     }
 
-    public TodoListCreateOrUpdateDTO(String title, String description) {
+    public TodoListDTO(String title, String description) {
         this.title = title;
         this.description = description;
     }

@@ -19,10 +19,10 @@ public class Feedback {
     private FeedbackType feedbackType;
 
     @Column(nullable = false)
-    private int satisfactionLevel;
+    private Integer satisfactionLevel;
 
     @Column(nullable = false)
-    private boolean acceptTerms;
+    private Boolean acceptTerms;
 
     @Column(nullable = false)
     private String comment;

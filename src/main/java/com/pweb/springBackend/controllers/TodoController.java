@@ -1,6 +1,6 @@
 package com.pweb.springBackend.controllers;
 
-import com.pweb.springBackend.DTOs.requests.TodoCreateOrUpdateDTO;
+import com.pweb.springBackend.DTOs.requests.TodoDTO;
 import com.pweb.springBackend.DTOs.responses.*;
 import com.pweb.springBackend.configs.JwtUtil;
 import com.pweb.springBackend.entities.Todo;
@@ -34,7 +34,7 @@ public class TodoController {
     }
 
     @PostMapping("/create/{todoListId}")
-    public ResponseEntity<ResponseDTO> createTodo(@RequestBody TodoCreateOrUpdateDTO todoCreateOrUpdateDTO,
+    public ResponseEntity<ResponseDTO> createTodo(@RequestBody TodoDTO todoDTO,
                                                   @RequestHeader("Authorization") String token,
                                                   @PathVariable Long todoListId) {
         String TOKEN_PREFIX = "Bearer ";
@@ -48,15 +48,15 @@ public class TodoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
         }
 
-        if (todoRepository.existsTodoByTitleAndTodoList(todoCreateOrUpdateDTO.getTitle(), todoList)) {
+        if (todoRepository.existsTodoByTitleAndTodoList(todoDTO.getTitle(), todoList)) {
             ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("Todo already exists!", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
         }
 
         Todo todo = new Todo();
-        todo.setTitle(todoCreateOrUpdateDTO.getTitle());
-        todo.setDescription(todoCreateOrUpdateDTO.getDescription());
-        todo.setIsCompleted(todoCreateOrUpdateDTO.getIsCompleted());
+        todo.setTitle(todoDTO.getTitle());
+        todo.setDescription(todoDTO.getDescription());
+        todo.setIsCompleted(todoDTO.getIsCompleted());
         todo.setTodoList(todoList);
 
         todoRepository.save(todo);
@@ -66,7 +66,7 @@ public class TodoController {
     }
 
     @PutMapping("/update/{todoListId}")
-    public ResponseEntity<ResponseDTO> updateTodo(@RequestBody TodoCreateOrUpdateDTO todoCreateOrUpdateDTO,
+    public ResponseEntity<ResponseDTO> updateTodo(@RequestBody TodoDTO todoDTO,
                                                   @RequestHeader("Authorization") String token,
                                                   @PathVariable Long todoListId) {
         String TOKEN_PREFIX = "Bearer ";
@@ -80,16 +80,16 @@ public class TodoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
         }
 
-        Todo todo = todoRepository.findByTitleAndTodoList(todoCreateOrUpdateDTO.getTitle(), todoList).orElse(null);
+        Todo todo = todoRepository.findByTitleAndTodoList(todoDTO.getTitle(), todoList).orElse(null);
 
         if (todo == null) {
             ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("Todo not found!", HttpStatus.NOT_FOUND);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDTO);
         }
 
-        todo.setTitle(todoCreateOrUpdateDTO.getTitle());
-        todo.setDescription(todoCreateOrUpdateDTO.getDescription());
-        todo.setIsCompleted(todoCreateOrUpdateDTO.getIsCompleted());
+        todo.setTitle(todoDTO.getTitle());
+        todo.setDescription(todoDTO.getDescription());
+        todo.setIsCompleted(todoDTO.getIsCompleted());
 
         todoRepository.save(todo);
 

@@ -7,3 +7,6 @@ stop_postgres_db:
 
 create_docker_image:
 	mvn spring-boot:build-image
+
+build_clean:
+	mvn clean install -U

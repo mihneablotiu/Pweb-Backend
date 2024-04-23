@@ -1,6 +1,6 @@
 package com.pweb.springBackend.controllers;
 
-import com.pweb.springBackend.DTOs.requests.TodoListCreateOrUpdateDTO;
+import com.pweb.springBackend.DTOs.requests.TodoListDTO;
 import com.pweb.springBackend.DTOs.responses.*;
 import com.pweb.springBackend.configs.JwtUtil;
 import com.pweb.springBackend.entities.TodoList;
@@ -30,19 +30,19 @@ public class TodoListController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createTodoList(@RequestBody TodoListCreateOrUpdateDTO todoListCreateOrUpdateDTO, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<ResponseDTO> createTodoList(@RequestBody TodoListDTO todoListDTO, @RequestHeader("Authorization") String token) {
         String TOKEN_PREFIX = "Bearer ";
         Claims claims = jwtUtil.parseJwtClaims(token.substring(TOKEN_PREFIX.length()));
 
         User user = userRepository.findByEmail(jwtUtil.getEmail(claims)).orElse(null);
-        if (todoListRepository.existsTodoListByTitleAndUser(todoListCreateOrUpdateDTO.getTitle(), user)) {
+        if (todoListRepository.existsTodoListByTitleAndUser(todoListDTO.getTitle(), user)) {
             ErrorResponseDTO errorResponse = new ErrorResponseDTO("Todo list already exists!", HttpStatus.BAD_REQUEST);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
 
         TodoList todoList = new TodoList();
-        todoList.setTitle(todoListCreateOrUpdateDTO.getTitle());
-        todoList.setDescription(todoListCreateOrUpdateDTO.getDescription());
+        todoList.setTitle(todoListDTO.getTitle());
+        todoList.setDescription(todoListDTO.getDescription());
         todoList.setUser(user);
 
         todoListRepository.save(todoList);
@@ -52,20 +52,20 @@ public class TodoListController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ResponseDTO> updateTodoList(@RequestBody TodoListCreateOrUpdateDTO todoListCreateOrUpdateDTO, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<ResponseDTO> updateTodoList(@RequestBody TodoListDTO todoListDTO, @RequestHeader("Authorization") String token) {
         String TOKEN_PREFIX = "Bearer ";
         Claims claims = jwtUtil.parseJwtClaims(token.substring(TOKEN_PREFIX.length()));
 
         User user = userRepository.findByEmail(jwtUtil.getEmail(claims)).orElse(null);
-        TodoList todoList = todoListRepository.findByTitleAndUser(todoListCreateOrUpdateDTO.getTitle(), user).orElse(null);
+        TodoList todoList = todoListRepository.findByTitleAndUser(todoListDTO.getTitle(), user).orElse(null);
 
         if (todoList == null) {
             ErrorResponseDTO errorResponse = new ErrorResponseDTO("Todo list not found!", HttpStatus.NOT_FOUND);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
-        todoList.setTitle(todoListCreateOrUpdateDTO.getTitle());
-        todoList.setDescription(todoListCreateOrUpdateDTO.getDescription());
+        todoList.setTitle(todoListDTO.getTitle());
+        todoList.setDescription(todoListDTO.getDescription());
 
         todoListRepository.save(todoList);
 
