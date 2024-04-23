@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS tags (
 );
 
 -- Add table feedback
+
 CREATE TABLE IF NOT EXISTS feedbacks (
     feedback_id BIGSERIAL PRIMARY KEY,
     feedback_type VARCHAR(50) NOT NULL,
